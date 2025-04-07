@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPA Calculator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4a6bff;
+            --secondary-color: #f8f9fa;
+            --accent-color: #ff6b6b;
+            --text-color: #333;
+            --light-text: #6c757d;
+            --border-color: #dee2e6;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: #f5f7ff;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+        
+        .course-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .course-row input, .course-row select {
+            padding: 10px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-family: 'Poppins', sans-serif;
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        .course-name {
+            flex: 2;
+        }
+        
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            background-color: #3a56e0;
+            transform: translateY(-2px);
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        #result {
+            background-color: var(--secondary-color);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        #result strong {
+            color: var(--primary-color);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            font-family: 'Montserrat', sans-serif;
+            color: var(--light-text);
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .quote {
+            font-style: italic;
+            margin-top: 10px;
+            color: var(--light-text);
+        }
+        
+        .signature {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-top: 5px;
+        }
+        
+        .whatsapp-link {
+            display: inline-block;
+            margin-top: 15px;
+            color: #25D366;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .whatsapp-link:hover {
+            text-decoration: underline;
+            transform: scale(1.05);
+        }
+        
+        .grading-system {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: var(--secondary-color);
+            border-radius: 8px;
+        }
+        
+        .grading-system label {
+            margin-right: 15px;
+            font-weight: 500;
+        }
+        
+        .custom-grades {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .grade-input {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+        
+        .grade-input input {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            width: 80px;
+        }
+        
+        @media (max-width: 768px) {
+            .course-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .course-row input, .course-row select {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>GPA Calculator</h1>
+        
+        <div class="grading-system">
+            <label>Grading System:</label>
+            <label><input type="radio" name="gradingSystem" value="default" checked onclick="toggleCustomGrades(false)"> Default</label>
+            <label><input type="radio" name="gradingSystem" value="custom" onclick="toggleCustomGrades(true)"> Custom</label>
+            
+            <div id="custom-grades" class="custom-grades">
+                <h3>Custom Grade Points</h3>
+                <div id="grade-inputs">
+                    <div class="grade-input">
+                        <input type="text" placeholder="Grade (e.g., A+)" class="grade-letter">
+                        <input type="number" placeholder="Min Score" class="min-score" min="0" max="100">
+                        <input type="number" placeholder="Max Score" class="max-score" min="0" max="100">
+                        <input type="number" placeholder="Grade Point" class="grade-point" step="0.1" min="0">
+                        <button onclick="removeGradeInput(this)">Remove</button>
+                    </div>
+                </div>
+                <button onclick="addGradeInput()" style="margin-top: 10px;">Add Grade</button>
+            </div>
+        </div>
+        
+        <div id="courses-container">
+            <div class="course-row">
+                <input type="text" placeholder="Course Name" class="course-name">
+                <input type="number" placeholder="Credit Hours" class="credit-hours" min="1">
+                <select class="grade">
+                    <option value="5">A+ (90-100)</option>
+                    <option value="5">A (80-89)</option>
+                    <option value="4.5">B+ (75-79)</option>
+                    <option value="4">B (70-74)</option>
+                    <option value="3.5">C+ (65-69)</option>
+                    <option value="3">C (60-64)</option>
+                    <option value="2.5">D+ (55-59)</option>
+                    <option value="2">D (50-54)</option>
+                    <option value="1.5">E (45-49)</option>
+                    <option value="1">E- (40-44)</option>
+                    <option value="0">F (Below 40)</option>
+                </select>
+                <button onclick="removeCourse(this)">Remove</button>
+            </div>
+        </div>
+        
+        <div class="button-group">
+            <button onclick="addCourse()">Add Course</button>
+            <button onclick="calculateGPA()">Calculate GPA</button>
+        </div>
+        
+        <div id="result"></div>
+        
+        <footer>
+            <div class="quote">"LITTLE IS MUCH WHEN GOD IS IN IT & THERE IS NOTHING THAT BEATS PERSISTENCY, WE CAN ALL DO BETTER AND MAKE OUR BETTER BEST"</div>
+            <div class="signature">MADE BY STEVEN KIWANUKA KAFEERO a.k.a S.K.KAFEERO 92<sup>nd</sup></div>
+            <a href="https://wa.me/256779668768" class="whatsapp-link" target="_blank">
+                Contact me on WhatsApp
+            </a>
+        </footer>
+    </div>
+    
+    <script>
+        // Default grading system
+        const defaultGrades = [
+            { letter: 'A+', min: 90, max: 100, point: 5 },
+            { letter: 'A', min: 80, max: 89, point: 5 },
+            { letter: 'B+', min: 75, max: 79, point: 4.5 },
+            { letter: 'B', min: 70, max: 74, point: 4 },
+            { letter: 'C+', min: 65, max: 69, point: 3.5 },
+            { letter: 'C', min: 60, max: 64, point: 3 },
+            { letter: 'D+', min: 55, max: 59, point: 2.5 },
+            { letter: 'D', min: 50, max: 54, point: 2 },
+            { letter: 'E', min: 45, max: 49, point: 1.5 },
+            { letter: 'E-', min: 40, max: 44, point: 1 },
+            { letter: 'F', min: 0, max: 39, point: 0 }
+        ];
+        
+        let currentGradingSystem = defaultGrades;
+        
+        function toggleCustomGrades(show) {
+            document.getElementById('custom-grades').style.display = show ? 'block' : 'none';
+            if (show) {
+                // Initialize with default grades when switching to custom
+                const container = document.getElementById('grade-inputs');
+                container.innerHTML = '';
+                defaultGrades.forEach(grade => {
+                    addGradeInput(grade.letter, grade.min, grade.max, grade.point);
+                });
+            }
+        }
+        
+        function addGradeInput(letter = '', min = '', max = '', point = '') {
+            const container = document.getElementById('grade-inputs');
+            const div = document.createElement('div');
+            div.className = 'grade-input';
+            div.innerHTML = `
+                <input type="text" placeholder="Grade (e.g., A+)" class="grade-letter" value="${letter}">
+                <input type="number" placeholder="Min Score" class="min-score" min="0" max="100" value="${min}">
+                <input type="number" placeholder="Max Score" class="max-score" min="0" max="100" value="${max}">
+                <input type="number" placeholder="Grade Point" class="grade-point" step="0.1" min="0" value="${point}">
+                <button onclick="removeGradeInput(this)">Remove</button>
+            `;
+            container.appendChild(div);
+        }
+        
+        function removeGradeInput(button) {
+            button.parentElement.remove();
+        }
+        
+        function addCourse() {
+            const container = document.getElementById('courses-container');
+            const newRow = document.createElement('div');
+            newRow.className = 'course-row';
+            
+            const gradingSystem = document.querySelector('input[name="gradingSystem"]:checked').value;
+            
+            if (gradingSystem === 'default') {
+                newRow.innerHTML = `
+                    <input type="text" placeholder="Course Name" class="course-name">
+                    <input type="number" placeholder="Credit Hours" class="credit-hours" min="1">
+                    <select class="grade">
+                        ${defaultGrades.map(grade => 
+                            `<option value="${grade.point}">${grade.letter} (${grade.min}-${grade.max})</option>`
+                        ).join('')}
+                    </select>
+                    <button onclick="removeCourse(this)">Remove</button>
+                `;
+            } else {
+                // Get custom grades
+                const gradeInputs = document.querySelectorAll('.grade-input');
+                const customGrades = [];
+                
+                gradeInputs.forEach(input => {
+                    const letter = input.querySelector('.grade-letter').value;
+                    const min = input.querySelector('.min-score').value;
+                    const max = input.querySelector('.max-score').value;
+                    const point = input.querySelector('.grade-point').value;
+                    
+                    if (letter && min && max && point) {
+                        customGrades.push({
+                            letter: letter,
+                            min: parseInt(min),
+                            max: parseInt(max),
+                            point: parseFloat(point)
+                        });
+                    }
+                });
+                
+                // Sort by min score descending
+                customGrades.sort((a, b) => b.min - a.min);
+                
+                newRow.innerHTML = `
+                    <input type="text" placeholder="Course Name" class="course-name">
+                    <input type="number" placeholder="Credit Hours" class="credit-hours" min="1">
+                    <select class="grade">
+                        ${customGrades.map(grade => 
+                            `<option value="${grade.point}">${grade.letter} (${grade.min}-${grade.max})</option>`
+                        ).join('')}
+                    </select>
+                    <button onclick="removeCourse(this)">Remove</button>
+                `;
+            }
+            
+            container.appendChild(newRow);
+        }
+        
+        function removeCourse(button) {
+            button.parentElement.remove();
+        }
+        
+        function calculateGPA() {
+            const rows = document.getElementsByClassName('course-row');
+            let totalQP = 0;
+            let totalHours = 0;
+            
+            for (let row of rows) {
+                const hours = parseFloat(row.querySelector('.credit-hours').value);
+                const grade = parseFloat(row.querySelector('.grade').value);
+                
+                if (!isNaN(hours) && hours > 0) {
+                    totalQP += hours * grade;
+                    totalHours += hours;
+                }
+            }
+            
+            const gpa = totalHours > 0 ? (totalQP / totalHours).toFixed(3) : 0;
+            let interpretation = '';
+            
+            if (gpa >= 4.5) interpretation = 'Exceptional';
+            else if (gpa >= 4.0) interpretation = 'Excellent';
+            else if (gpa >= 3.5) interpretation = 'Very Good';
+            else if (gpa >= 3.0) interpretation = 'Good';
+            else if (gpa >= 2.5) interpretation = 'Fairly Good';
+            else if (gpa >= 2.0) interpretation = 'Fair';
+            else if (gpa >= 1.5) interpretation = 'Marginal';
+            else interpretation = 'Needs Improvement';
+            
+            document.getElementById('result').innerHTML = `
+                <h3>Results</h3>
+                <p><strong>GPA:</strong> ${gpa}</p>
+                <p><strong>Interpretation:</strong> ${interpretation}</p>
+                <p><strong>Total Quality Points:</strong> ${totalQP.toFixed(2)}</p>
+                <p><strong>Total Credit Hours:</strong> ${totalHours}</p>
+            `;
+        }
+    </script>
+</body>
+</html>
