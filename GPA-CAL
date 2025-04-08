@@ -298,8 +298,8 @@
             
             if (gradingSystem === 'default') {
                 newRow.innerHTML = `
-                    <input type="text" placeholder="Course Name" class="course-name">
-                    <input type="number" placeholder="Credit Hours" class="credit-hours" min="1">
+                    <input type="text" placeholder="Name Of Course Unit" class="course-name">
+                    <input type="number" placeholder="Credit Unit(Hours)" class="credit-hours" min="1">
                     <select class="grade">
                         ${defaultGrades.map(grade => 
                             `<option value="${grade.point}">${grade.letter} (${grade.min}-${grade.max})</option>`
@@ -332,8 +332,8 @@
                 customGrades.sort((a, b) => b.min - a.min);
                 
                 newRow.innerHTML = `
-                    <input type="text" placeholder="Course Name" class="course-name">
-                    <input type="number" placeholder="Credit Hours" class="credit-hours" min="1">
+                    <input type="text" placeholder="Name Of Course Unit" class="course-name">
+                    <input type="number" placeholder="Credit Unit(Hours)" class="credit-hours" min="1">
                     <select class="grade">
                         ${customGrades.map(grade => 
                             `<option value="${grade.point}">${grade.letter} (${grade.min}-${grade.max})</option>`
