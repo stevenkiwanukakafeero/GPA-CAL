@@ -206,8 +206,8 @@
         
         <div id="courses-container">
             <div class="course-row">
-                <input type="text" placeholder="Course Name" class="course-name">
-                <input type="number" placeholder="Credit Hours" class="credit-hours" min="1">
+                <input type="text" placeholder="Course Unit" class="course-name">
+                <input type="number" placeholder="Credit Unit(Hours)" class="credit-hours" min="1">
                 <select class="grade">
                     <option value="5">A+ (90-100)</option>
                     <option value="5">A (80-89)</option>
@@ -221,12 +221,12 @@
                     <option value="1">E- (40-44)</option>
                     <option value="0">F (Below 40)</option>
                 </select>
-                <button onclick="removeCourse(this)">Remove</button>
+                <button onclick="removeCourse(this)">Remove Course Unit</button>
             </div>
         </div>
         
         <div class="button-group">
-            <button onclick="addCourse()">Add Course</button>
+            <button onclick="addCourse()">Add Course Unit</button>
             <button onclick="calculateGPA()">Calculate GPA</button>
         </div>
         
